@@ -1,7 +1,7 @@
 const express = require( 'express');
 const app = express();
 const mongoose = require("mongoose");
-const Camground = require("Camground");
+const Campground = require("./models/campgrounds");
 const path = require('path');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
@@ -23,8 +23,10 @@ app.get('/',(req,res) => {
     res.render('home')
 })
 
-app.get("/makecampground", (req, res) => {
-  res.render("home");
+app.get("/makecampground", async (req, res) => {
+  const campGround = new Campground({title: "My sandy backyard", description: "It is very freaking sandy!"});
+  await campGround.save();
+  res.send(campGround)
 });
 
 app.listen(3000, () => {
